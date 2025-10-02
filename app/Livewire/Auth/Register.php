@@ -37,6 +37,8 @@ class Register extends Component
 
         event(new Registered(($user = User::create($validated))));
 
+        $user->assignRole('usuario');
+
         Auth::login($user);
 
         Session::regenerate();
