@@ -13,8 +13,11 @@ return new class extends Migration
     {
         Schema::create('inventories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('tool_id')->constrained('tools');
-            $table->foreignId('product_id')->constrained('products');
+            $table->foreignId('tool_id')->nullable()->constrained('tools'); // puede ser null si es un product
+            $table->foreignId('product_id')->nullable()->constrained('products'); // puede ser null si es un tool
+            $table->foreignId('user_id')->constrained('users');
+            $table->integer('cantidad')->default(1); // cantidad prestada
+            $table->boolean('devuelto')->default(false); // para saber si ya fue devuelto
             $table->timestamps();
         });
     }

@@ -12,7 +12,8 @@ class InventoryController extends Controller
      */
     public function index()
     {
-        //
+         $inventories = Inventory::with('tool')->get();
+        return view('container.inventories.index', compact('inventories'));
     }
 
     /**
@@ -61,5 +62,23 @@ class InventoryController extends Controller
     public function destroy(Inventory $inventory)
     {
         //
+    }
+
+    public function devolver(Inventory $inventory)
+    {
+        if ($inventory->devuelto) {
+            return back()->with('error', 'Este préstamo ya fue devuelto.');
+        }
+
+        // Sumar stock de la herramienta
+        $tool = $inventory->tool;
+        $tool->stock += $inventory->cantidad;
+        $tool->save();
+
+        // Marcar como devuelto
+        $inventory->devuelto = true;
+        $inventory->save();
+
+        return back()->with('success', 'Herramienta devuelta correctamente.');
     }
 }

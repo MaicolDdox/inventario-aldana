@@ -6,6 +6,9 @@ use App\Livewire\Settings\Profile;
 use App\Livewire\Settings\TwoFactor;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
+use App\Http\Controllers\ToolController;
+use App\Http\Controllers\InventoryController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -32,6 +35,18 @@ Route::middleware(['auth'])->group(function () {
             ),
         )
         ->name('two-factor.show');
+
+    // CRUD de herramientas
+    Route::resource('tools', ToolController::class);
+            
+    // CRUD de inventario (para ver historial de préstamos)
+    Route::resource('inventories', InventoryController::class)->only(['index', 'show']);
+            
+    // Ruta especial: prestar herramienta
+    Route::post('/tools/{tool}/prestar', [ToolController::class, 'prestar'])->name('tools.prestar');
+            
+    // Ruta especial: devolver herramienta (va en InventoryController)
+    Route::post('/inventories/{inventory}/devolver', [InventoryController::class, 'devolver'])->name('inventories.devolver');
 });
 
 require __DIR__.'/auth.php';

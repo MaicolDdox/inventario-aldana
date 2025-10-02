@@ -12,7 +12,10 @@ class Inventory extends Model
 
     protected $fillable = [
         'tool_id',
-        'product_id'
+        'product_id',
+        'user_id',
+        'cantidad',
+        'devuelto'
     ];
 
     public function tool():BelongsTo
@@ -23,5 +26,10 @@ class Inventory extends Model
     public function product():BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class); // 🔹 Relación
     }
 }
