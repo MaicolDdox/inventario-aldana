@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use App\Http\Controllers\ToolController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\ProductController;
 
 
 Route::get('/', function () {
@@ -47,6 +48,12 @@ Route::middleware(['auth'])->group(function () {
             
     // Ruta especial: devolver herramienta (va en InventoryController)
     Route::post('/inventories/{inventory}/devolver', [InventoryController::class, 'devolver'])->name('inventories.devolver');
+
+    // Resource
+    Route::resource('products', ProductController::class);
+
+    // Ruta para prestar (descontar stock)
+    Route::post('products/{product}/prestar', [ProductController::class, 'prestar'])->name('products.prestar');
 });
 
 require __DIR__.'/auth.php';

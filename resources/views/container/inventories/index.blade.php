@@ -21,7 +21,7 @@
         <table class="table table-zebra w-full">
             <thead>
                 <tr class="bg-base-200">
-                    <th class="text-gray-800">Herramienta</th>
+                    <th class="text-gray-800">Item</th>
                     <th class="text-gray-800">Cantidad</th>
                     <th class="text-gray-800">Estado</th>
                     <th class="text-gray-800">Usuario</th>
@@ -31,7 +31,16 @@
             <tbody>
                 @foreach($inventories as $inventory)
                     <tr>
-                        <td class="text-gray-700">{{ $inventory->tool->nombre }}</td>
+                        <td class="text-gray-700">
+                            {{-- Mostrar nombre de herramienta o producto --}}
+                            @if($inventory->tool)
+                                🛠 {{ $inventory->tool->nombre }}
+                            @elseif($inventory->product)
+                                📦 {{ $inventory->product->nombre }}
+                            @else
+                                ❓ Desconocido
+                            @endif
+                        </td>
                         <td class="text-gray-700">{{ $inventory->cantidad }}</td>
                         <td>
                             <span class="badge {{ $inventory->devuelto ? 'badge-success' : 'badge-error' }}">
@@ -42,13 +51,17 @@
                             {{ $inventory->user->name ?? 'Desconocido' }}
                         </td>
                         <td>
-                            @if(!$inventory->devuelto)
+                            @if($inventory->tool && !$inventory->devuelto)
+                                {{-- Solo las herramientas se devuelven --}}
                                 <form action="{{ route('inventories.devolver', $inventory) }}" method="POST" class="inline">
                                     @csrf
                                     <button type="submit" class="btn btn-sm btn-primary">
                                         Devolver
                                     </button>
                                 </form>
+                            @elseif($inventory->product)
+                                {{-- Para productos no hay devolución --}}
+                                <span class="text-gray-500 italic">N/A</span>
                             @else
                                 <span class="text-gray-500 italic">No disponible</span>
                             @endif

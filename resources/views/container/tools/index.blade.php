@@ -17,8 +17,9 @@
             </div>
         @endif
 
+        @role('administrador')
         <a href="{{ route('tools.create') }}" class="btn btn-primary mb-4">Nueva herramienta</a>
-
+        @endrole
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             @foreach ($tools as $tool)
                 <div class="card bg-white shadow-xl">
@@ -30,6 +31,7 @@
                         <h2 class="card-title text-black">{{ $tool->nombre }}</h2>
                         <p class="text-black">Stock: {{ $tool->stock }}</p>
 
+                        @role('usuario')
                         {{-- Formulario de Préstamo --}}
                         <form action="{{ route('tools.prestar', $tool) }}" method="POST"
                             class="flex items-center gap-2 mt-2">
@@ -38,7 +40,8 @@
                                 class="input input-bordered w-20 text-white" />
                             <button type="submit" class="btn btn-sm btn-warning">Prestar</button>
                         </form>
-
+                        @endrole
+                        @role('administrador')
                         <div class="flex justify-between mt-4">
                             {{-- Editar --}}
                             <a href="{{ route('tools.edit', $tool) }}" class="btn btn-sm btn-info">Editar</a>
@@ -51,6 +54,7 @@
                                 <button type="submit" class="btn btn-sm btn-error">Eliminar</button>
                             </form>
                         </div>
+                        @endrole
                     </div>
                 </div>
             @endforeach
