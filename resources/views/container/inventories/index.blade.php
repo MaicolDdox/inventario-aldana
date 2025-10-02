@@ -53,12 +53,14 @@
                         <td>
                             @if($inventory->tool && !$inventory->devuelto)
                                 {{-- Solo las herramientas se devuelven --}}
+                                @role('usuario')
                                 <form action="{{ route('inventories.devolver', $inventory) }}" method="POST" class="inline">
                                     @csrf
                                     <button type="submit" class="btn btn-sm btn-primary">
                                         Devolver
                                     </button>
                                 </form>
+                                @endrole
                             @elseif($inventory->product)
                                 {{-- Para productos no hay devolución --}}
                                 <span class="text-gray-500 italic">N/A</span>
